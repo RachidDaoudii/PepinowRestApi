@@ -1,6 +1,11 @@
 <?php
 
+use App\Models\Plantes;
+use App\Models\Categories;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\PlantesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +21,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
