@@ -11,7 +11,7 @@ class StorePlantesRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class StorePlantesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string',
+            'scientific_name' => 'required|string',
+            'family' => 'required|string',
+            'genus' => 'required|string',
+            'height' => 'required',
+            'origin' => 'required|string',
+            'quantity' => 'required',
+            'category_id' => 'required',
         ];
     }
 }

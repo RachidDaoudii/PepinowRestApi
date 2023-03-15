@@ -13,7 +13,11 @@ class PlantesController extends Controller
      */
     public function index()
     {
-        //
+        $plantes = Plantes::get();
+        return response()->json([
+            'status' => 'success',
+            'plantes' => $plantes
+        ]);
     }
 
     /**
@@ -29,15 +33,36 @@ class PlantesController extends Controller
      */
     public function store(StorePlantesRequest $request)
     {
-        //
+        $plantes = Plantes::create([
+            'name' => $request->name,
+            'scientific_name' => $request->scientific_name,
+            'family' => $request->family,
+            'genus' => $request->genus,
+            'height' => $request->height,
+            'origin' => $request->origin,
+            'quantity' => $request->quantity,
+            'category_id' => $request->category_id,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success created plant',
+            'plant' => $plantes
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Plantes $plantes)
+    public function show(Plantes $plantes,$id)
     {
-        //
+        $plant = Plantes::find($id);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success created plant',
+            'plant' => $plant
+        ], 201);
     }
 
     /**
@@ -51,16 +76,29 @@ class PlantesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePlantesRequest $request, Plantes $plantes)
+    public function update(UpdatePlantesRequest $request, Plantes $plantes,$id)
     {
-        //
+        $plant = Plantes::find($id)->update([
+            'name' => $request->name
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success updated plant',
+            'plant' => $plant
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Plantes $plantes)
+    public function destroy(Plantes $plantes,$id)
     {
-        //
+        $plant = Plantes::find($id)->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success deleted plant'
+        ], 201);
     }
 }

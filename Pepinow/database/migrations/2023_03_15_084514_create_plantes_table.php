@@ -20,7 +20,6 @@ return new class extends Migration
             $table->float('height');
             $table->string('origin');
             $table->integer('quantity');
-            // $table->foreign('id_category')->references('id')->on('categories');
             $table->foreignId('category_id')->constrained('categories');
             $table->timestamps();
         });

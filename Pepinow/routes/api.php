@@ -28,5 +28,5 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
 });
 
-Route::apiResource('plantes', PlantesController::class);
-Route::apiResource('categories', CategoriesController::class);
+Route::apiResource('plantes', PlantesController::class)->middleware('auth:api');
+Route::apiResource('categories', CategoriesController::class)->middleware('auth:api');

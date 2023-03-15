@@ -69,16 +69,29 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoriesRequest $request, Categories $categories)
+    public function update(UpdateCategoriesRequest $request, Categories $categories,$id)
     {
-        //
+        $category = Categories::find($id)->update([
+            'name' => $request->name
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success updated category',
+            'category' => $category
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categories $categories)
+    public function destroy(Categories $categories,$id)
     {
-        //
+        $category = Categories::find($id)->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success deleted category'
+        ], 201);
     }
 }
