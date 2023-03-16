@@ -17,7 +17,7 @@ class CheckUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role == UserType::User){
+        if(Auth::user()->role == UserType::User || Auth::user()->role == UserType::Admin || Auth::user()->role == UserType::Vendeur){
             return $next($request);
         }else{
             return response()->json([

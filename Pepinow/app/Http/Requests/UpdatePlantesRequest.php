@@ -24,7 +24,7 @@ class UpdatePlantesRequest extends FormRequest
         return [
             'name' => 'required|string',
             'description' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,jpg,png,bmp,gif,svg',
+            // 'image' => 'required|image|mimes:jpeg,jpg,png,bmp,gif,svg',
             'prix' => 'required|string',
             'category_id' => 'required|exists:categories,id',
         ];

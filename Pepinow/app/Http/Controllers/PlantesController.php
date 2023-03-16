@@ -85,8 +85,10 @@ class PlantesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePlantesRequest $request, Plantes $plantes,$id)
+    public function update(UpdatePlantesRequest $request, Plantes $plant,$id)
     {
+        $this->authorize('update', $plant);
+
         $image = $request->file('image');
         $name_gen = hexdec(uniqid());
         $img_ext = strtolower($image->getClientOriginalExtension());
@@ -95,7 +97,7 @@ class PlantesController extends Controller
         $last_img = $location.$img_name;
         $image->move($location,$img_name);
 
-        $plant = Plantes::find($id)->update([
+        Plantes::find($id)->update([
             'name' => $request->name,
             'description' => $request->description,
             'image' => $last_img,
@@ -113,11 +115,10 @@ class PlantesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Plantes $plantes,$id)
+    public function destroy(Plantes $plant)
     {
-        $this->authorize('delete', $plantes);
-
-        $plant = Plantes::find($id)->delete();
+        $this->authorize('delete', $plant);
+        $plant->delete();
 
         return response()->json([
             'status' => true,
