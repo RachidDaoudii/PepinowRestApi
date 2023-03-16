@@ -14,6 +14,7 @@ final class UserType extends Enum
 {
     const Admin = 'admin';
     const User = 'user';
+    const Vendeur = 'vendeur';
 
     // public static function getValues():Array
     // {

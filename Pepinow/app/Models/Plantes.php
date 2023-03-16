@@ -9,7 +9,7 @@ class Plantes extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','scientific_name','family','genus','height','origin','quantity','category_id'];
+    protected $fillable = ['name','description','image','prix','category_id','user_id'];
 
     public function Categories(){
         return $this->belongsTo(Categories::class,'id');

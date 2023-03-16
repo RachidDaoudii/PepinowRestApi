@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categories;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCategoriesRequest;
 use App\Http\Requests\UpdateCategoriesRequest;
 
@@ -13,6 +14,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
+
         $categories = Categories::get();
         return response()->json([
             'status' => 'success',
@@ -33,9 +35,9 @@ class CategoriesController extends Controller
      */
     public function store(StoreCategoriesRequest $request)
     {
-        $category = Categories::create([
-            'name' => $request->name,
-        ]);
+        $validated = $request->validated();
+        $validated['user_id'] = Auth::user()->id;
+        $category = Categories::create($validated);
 
         return response()->json([
             'status' => true,
@@ -69,11 +71,11 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoriesRequest $request, Categories $categories,$id)
+    public function update(UpdateCategoriesRequest $request,Categories $category)
     {
-        $category = Categories::find($id)->update([
-            'name' => $request->name
-        ]);
+        $this->authorize('update', $category);
+        $validated = $request->validated();
+        $category->update($validated);
 
         return response()->json([
             'status' => true,
@@ -85,9 +87,10 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categories $categories,$id)
+    public function destroy(Categories $category)
     {
-        $category = Categories::find($id)->delete();
+        $this->authorize('delete', $category);
+        $category->delete();
 
         return response()->json([
             'status' => true,

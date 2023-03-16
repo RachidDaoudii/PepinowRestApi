@@ -28,5 +28,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
 });
 
-Route::apiResource('plantes', PlantesController::class)->middleware('auth:api');
-Route::apiResource('categories', CategoriesController::class)->middleware('auth:api');
+Route::apiResource('plantes', PlantesController::class)->middleware(['auth','checkAdmin']);
+Route::apiResource('plantes', PlantesController::class)->only(['index','show'])->middleware(['auth','checkUser']);
+
+Route::apiResource('categories', CategoriesController::class)->middleware(['auth','checkAdmin']);
+Route::apiResource('categories', CategoriesController::class)->only(['index','show'])->middleware(['auth','checkUser']);
+

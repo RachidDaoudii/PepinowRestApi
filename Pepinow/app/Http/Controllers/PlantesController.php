@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plantes;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePlantesRequest;
 use App\Http\Requests\UpdatePlantesRequest;
 
@@ -33,15 +34,23 @@ class PlantesController extends Controller
      */
     public function store(StorePlantesRequest $request)
     {
+        // 'name','description','image','prix','category_id'
+        $image = $request->file('image');
+        $name_gen = hexdec(uniqid());
+        $img_ext = strtolower($image->getClientOriginalExtension());
+        $img_name = $name_gen.'.'.$img_ext;
+        $location = 'img/Plants/';
+        $last_img = $location.$img_name;
+        $image->move($location,$img_name);
+        
+
         $plantes = Plantes::create([
             'name' => $request->name,
-            'scientific_name' => $request->scientific_name,
-            'family' => $request->family,
-            'genus' => $request->genus,
-            'height' => $request->height,
-            'origin' => $request->origin,
-            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'image' => $last_img,
+            'prix' => $request->prix,
             'category_id' => $request->category_id,
+            'user_id' => Auth::user()->id,
         ]);
 
         return response()->json([
@@ -78,8 +87,20 @@ class PlantesController extends Controller
      */
     public function update(UpdatePlantesRequest $request, Plantes $plantes,$id)
     {
+        $image = $request->file('image');
+        $name_gen = hexdec(uniqid());
+        $img_ext = strtolower($image->getClientOriginalExtension());
+        $img_name = $name_gen.'.'.$img_ext;
+        $location = 'img/Plants/';
+        $last_img = $location.$img_name;
+        $image->move($location,$img_name);
+
         $plant = Plantes::find($id)->update([
-            'name' => $request->name
+            'name' => $request->name,
+            'description' => $request->description,
+            'image' => $last_img,
+            'prix' => $request->prix,
+            'category_id' => $request->category_id,
         ]);
 
         return response()->json([
@@ -94,6 +115,8 @@ class PlantesController extends Controller
      */
     public function destroy(Plantes $plantes,$id)
     {
+        $this->authorize('delete', $plantes);
+
         $plant = Plantes::find($id)->delete();
 
         return response()->json([

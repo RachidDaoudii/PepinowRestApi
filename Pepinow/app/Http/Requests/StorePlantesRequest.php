@@ -23,13 +23,9 @@ class StorePlantesRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'scientific_name' => 'required|string',
-            'family' => 'required|string',
-            'genus' => 'required|string',
-            'height' => 'required',
-            'origin' => 'required|string',
-            'quantity' => 'required',
-            'category_id' => 'required',
+            'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,jpg,png,bmp,gif,svg',
+            'prix' => 'required|string',
         ];
     }
 }
