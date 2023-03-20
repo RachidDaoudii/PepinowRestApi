@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlantesController;
 use App\Http\Controllers\CategoriesController;
+// use App\Http\Controllers\RoleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +35,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
 });
 
-Route::apiResource('plantes', PlantesController::class)->middleware(['auth','checkAdmin']);
-Route::apiResource('plantes', PlantesController::class)->only(['index','show'])->middleware(['auth','checkUser']);
+Route::apiResource('roles', RoleController::class);
+Route::apiResource('permissions', PermissionController::class);
 
-Route::apiResource('categories', CategoriesController::class)->middleware(['auth','checkAdmin']);
-Route::apiResource('categories', CategoriesController::class)->only(['index','show'])->middleware(['auth','checkUser']);
+Route::apiResource('plantes', PlantesController::class);
+// Route::apiResource('plantes', PlantesController::class)->only(['index','show'])->middleware(['auth','checkUser']);
+
+Route::apiResource('categories', CategoriesController::class);
+// Route::apiResource('categories', CategoriesController::class)->only(['index','show'])->middleware(['auth','checkUser']);
 

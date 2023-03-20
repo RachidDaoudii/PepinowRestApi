@@ -9,6 +9,11 @@ use App\Http\Requests\UpdatePlantesRequest;
 
 class PlantesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+    }
+    
     /**
      * Display a listing of the resource.
      */
@@ -65,7 +70,7 @@ class PlantesController extends Controller
      */
     public function show(Plantes $plantes,$id)
     {
-        $plant = Plantes::find($id);
+        $plant = Plantes::findorfail($id);
 
         return response()->json([
             'status' => true,
@@ -87,7 +92,7 @@ class PlantesController extends Controller
      */
     public function update(UpdatePlantesRequest $request, Plantes $plant,$id)
     {
-        $this->authorize('update', $plant);
+        // $this->authorize('update', $plant);
 
         $image = $request->file('image');
         $name_gen = hexdec(uniqid());
@@ -97,7 +102,7 @@ class PlantesController extends Controller
         $last_img = $location.$img_name;
         $image->move($location,$img_name);
 
-        Plantes::find($id)->update([
+        Plantes::findorfail($id)->update([
             'name' => $request->name,
             'description' => $request->description,
             'image' => $last_img,
@@ -115,10 +120,11 @@ class PlantesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Plantes $plant)
+    public function destroy(Plantes $plant,$id)
     {
-        $this->authorize('delete', $plant);
-        $plant->delete();
+        // $this->authorize('delete', Plantes::class);
+        // $plant->delete();
+        Plantes::findorfail($id)->delete();
 
         return response()->json([
             'status' => true,

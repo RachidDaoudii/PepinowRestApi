@@ -9,6 +9,10 @@ use App\Http\Requests\UpdateCategoriesRequest;
 
 class CategoriesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index', 'show']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -51,7 +55,7 @@ class CategoriesController extends Controller
      */
     public function show(Categories $categories,$id)
     {
-        $category = Categories::find($id);
+        $category = Categories::findorfail($id);
 
         return response()->json([
             'status' => true,
@@ -73,7 +77,7 @@ class CategoriesController extends Controller
      */
     public function update(UpdateCategoriesRequest $request,Categories $category)
     {
-        $this->authorize('update', $category);
+        // $this->authorize('update', $category);
         $validated = $request->validated();
         $category->update($validated);
 
@@ -89,7 +93,7 @@ class CategoriesController extends Controller
      */
     public function destroy(Categories $category)
     {
-        $this->authorize('delete', $category);
+        // $this->authorize('delete', $category);
         $category->delete();
 
         return response()->json([

@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\UserType;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,14 +16,6 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role == UserType::Admin || Auth::user()->role == UserType::Vendeur){
             return $next($request);
-        }else{
-            // return abort(404);
-            return response()->json([
-                'status' => true,
-                'message' => 'Your are not authorized',
-            ],404);
-        }
     }
 }
