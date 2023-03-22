@@ -18,7 +18,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-
+        $this->authorize('viewAny', Categories::class);
         $categories = Categories::get();
         return response()->json([
             'status' => 'success',
@@ -39,6 +39,8 @@ class CategoriesController extends Controller
      */
     public function store(StoreCategoriesRequest $request)
     {
+        $this->authorize('create', Categories::class);
+
         $validated = $request->validated();
         $validated['user_id'] = Auth::user()->id;
         $category = Categories::create($validated);
@@ -55,6 +57,8 @@ class CategoriesController extends Controller
      */
     public function show(Categories $categories,$id)
     {
+        $this->authorize('view', $categories);
+
         $category = Categories::findorfail($id);
 
         return response()->json([
@@ -77,7 +81,8 @@ class CategoriesController extends Controller
      */
     public function update(UpdateCategoriesRequest $request,Categories $category)
     {
-        // $this->authorize('update', $category);
+        $this->authorize('update', $category);
+
         $validated = $request->validated();
         $category->update($validated);
 
@@ -93,7 +98,8 @@ class CategoriesController extends Controller
      */
     public function destroy(Categories $category)
     {
-        // $this->authorize('delete', $category);
+        $this->authorize('delete', $category);
+
         $category->delete();
 
         return response()->json([

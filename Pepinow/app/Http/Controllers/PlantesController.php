@@ -19,6 +19,8 @@ class PlantesController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Plantes::class);
+
         $plantes = Plantes::get();
         return response()->json([
             'status' => 'success',
@@ -39,6 +41,8 @@ class PlantesController extends Controller
      */
     public function store(StorePlantesRequest $request)
     {
+        $this->authorize('create', Plantes::class);
+
         // 'name','description','image','prix','category_id'
         $image = $request->file('image');
         $name_gen = hexdec(uniqid());
@@ -70,6 +74,8 @@ class PlantesController extends Controller
      */
     public function show(Plantes $plantes,$id)
     {
+        $this->authorize('view', $plantes);
+
         $plant = Plantes::findorfail($id);
 
         return response()->json([
@@ -92,7 +98,8 @@ class PlantesController extends Controller
      */
     public function update(UpdatePlantesRequest $request, Plantes $plant,$id)
     {
-        // $this->authorize('update', $plant);
+        $this->authorize('update', $plant);
+
 
         $image = $request->file('image');
         $name_gen = hexdec(uniqid());
@@ -122,6 +129,8 @@ class PlantesController extends Controller
      */
     public function destroy(Plantes $plant,$id)
     {
+        $this->authorize('delete', $plant);
+
         // $this->authorize('delete', Plantes::class);
         // $plant->delete();
         Plantes::findorfail($id)->delete();

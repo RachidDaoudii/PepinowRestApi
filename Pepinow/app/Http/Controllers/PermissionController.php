@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
@@ -12,6 +14,8 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        // $this->authorize('',Role::class);
+
         $permission = Permission::all();
         return response()->json([
             'status' => 'success',
@@ -66,4 +70,8 @@ class PermissionController extends Controller
     {
         //
     }
+
+
+    
+    
 }

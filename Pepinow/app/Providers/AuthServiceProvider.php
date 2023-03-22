@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 
-use App\Models\Categories;
 use App\Models\Plantes;
+use App\Models\Categories;
+use App\Policies\RolePolicy;
+use App\Policies\PlantesPolicy;
 use App\Policies\CategoriesPolicy;
-use App\Policies\PlantPolicy;
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -20,7 +22,8 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         // 'App\Models\Categories' => 'App\Policies\CategoriesPolicy',
         Categories::class => CategoriesPolicy::class,
-        Plantes::class => PlantPolicy::class,
+        Plantes::class => PlantesPolicy::class,
+        Role::class => RolePolicy::class,
     ];
 
     /**

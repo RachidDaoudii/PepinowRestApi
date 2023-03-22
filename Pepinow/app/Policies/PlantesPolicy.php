@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\Plantes;
+use App\Models\User;
+use Illuminate\Auth\Access\Response;
+
+class PlantesPolicy
+{
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->hasPermissionTo('views-Plant') || $user->hasPermissionTo('*');
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Plantes $plantes): bool
+    {
+        return $user->hasPermissionTo('show-Plant') || $user->hasPermissionTo('*');
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return $user->hasPermissionTo('create-Plant') || $user->hasPermissionTo('*');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Plantes $plantes): bool
+    {
+        return ( $user->hasPermissionTo('update-Plant') && $user->id == $plantes->user_id ) || $user->hasPermissionTo('*');
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Plantes $plantes): bool
+    {
+        return ( $user->hasPermissionTo('delete-Plant') && $user->id == $plantes->user_id ) || $user->hasPermissionTo('*');
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, Plantes $plantes)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Plantes $plantes)
+    {
+        //
+    }
+}

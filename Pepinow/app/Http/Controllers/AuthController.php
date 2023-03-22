@@ -75,7 +75,7 @@ class AuthController extends Controller
     }
 
     public function infoProfile(){
-        $user = DB::table('users')->select('name','email','role')->find(Auth::user()->id);
+        $user = DB::table('users')->select('name','email')->find(Auth::user()->id);
         return response()->json([
             'status' => 'success',
             'user' =>$user
