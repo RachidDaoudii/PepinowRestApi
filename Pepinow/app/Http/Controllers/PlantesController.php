@@ -98,30 +98,50 @@ class PlantesController extends Controller
      */
     public function update(UpdatePlantesRequest $request, Plantes $plant,$id)
     {
+        $plant = Plantes::findorfail($id);
+
         $this->authorize('update', $plant);
 
-
         $image = $request->file('image');
-        $name_gen = hexdec(uniqid());
-        $img_ext = strtolower($image->getClientOriginalExtension());
-        $img_name = $name_gen.'.'.$img_ext;
-        $location = 'img/Plants/';
-        $last_img = $location.$img_name;
-        $image->move($location,$img_name);
+        if($image == null){
+            $plant->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'prix' => $request->prix,
+                'category_id' => $request->category_id,
+            ]);
+    
+            return response()->json([
+                'status' => true,
+                'message' => 'success updated plant',
+                'plant' => $plant
+            ], 201);
+        }else{
+            $name_gen = hexdec(uniqid());
+            $img_ext = strtolower($image->getClientOriginalExtension());
+            $img_name = $name_gen.'.'.$img_ext;
+            $location = 'img/Plants/';
+            $last_img = $location.$img_name;
+            $image->move($location,$img_name);
 
-        Plantes::findorfail($id)->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'image' => $last_img,
-            'prix' => $request->prix,
-            'category_id' => $request->category_id,
-        ]);
+            $plant->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'prix' => $request->prix,
+                'image' => $last_img,
+                'category_id' => $request->category_id,
+            ]);
+    
+            return response()->json([
+                'status' => true,
+                'message' => 'success updated plant',
+                'plant' => $plant
+            ], 201);
+        }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'success updated plant',
-            'plant' => $plant
-        ], 201);
+        
+
+        
     }
 
     /**
@@ -129,11 +149,11 @@ class PlantesController extends Controller
      */
     public function destroy(Plantes $plant,$id)
     {
+        
+        $plant = Plantes::findorfail($id);
         $this->authorize('delete', $plant);
-
-        // $this->authorize('delete', Plantes::class);
-        // $plant->delete();
-        Plantes::findorfail($id)->delete();
+        $plant->delete();
+        // Plantes::findorfail($id)->delete();
 
         return response()->json([
             'status' => true,

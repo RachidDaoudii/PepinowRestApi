@@ -75,10 +75,21 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,$id)
     {
-        $this->authorize('update-Role',Role::class);
-        
+        $role = Role::findorfail($id);
+
+        $this->authorize('update-Role',$role);
+
+        $role->update([
+            'name' => $request->name
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success updated role',
+            'role' => $role
+        ], 201);
     }
 
     /**
@@ -86,9 +97,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete-Role',Role::class);
-
         $role = Role::findorfail($id);
+
+        $this->authorize('delete-Role',$role);
+
 
         $role->delete();
 
